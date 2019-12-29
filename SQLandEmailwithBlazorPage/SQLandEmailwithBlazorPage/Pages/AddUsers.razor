@@ -1,0 +1,73 @@
+﻿@page "/adduser"
+@using SQLandEmailwithBlazorPage.Data
+@using Newtonsoft.Json
+@using SQLandEmailwithBlazorPage.Models
+@using System.Text
+<h1>Populate DB with Sample Values</h1>
+
+<button class="btn btn-primary" @onclick="PopulateDBAsync">PopulateFakeDB</button><br />
+<div class="simple-form">
+    <div class="form-group">
+        <label for="first-name">First Name</label>
+        <input @bind="newUser.FirstName" type="text" class="form-control" id="name" placeholder="First Name" />
+    </div>
+    <div class="form-group">
+        <label for="last-name">Last Name</label>
+        <input @bind="newUser.LastName" type="text" class="form-control" id="lastname" placeholder="Last Name" />
+    </div>
+    <div class="form-group">
+        <label for="email">Email</label>
+        <input @bind="newUser.Email" type="text" class="form-control" id="name" placeholder="email" />
+    </div>
+    <div class="form-group">
+        <label for="Hobbies">Hobbies</label>
+        <input @bind="newUser.Hobbies" type="text" class="form-control" id="Hobbies" placeholder="Hobbies" />
+    </div>
+    <div class="form-group">
+        <label for="ocupation">Ocupation</label>
+        <input @bind="newUser.Ocupation" type="text" class="form-control" id="name" placeholder="Ocupation" />
+    </div>
+    <div class="form-group">
+        <label for="age">Age</label>
+        <input @bind="newUser.Age" type="number" class="form-control" id="age" placeholder="Age" />
+    </div>
+</div>
+<button class="btn btn-success" @onclick="AddUserAsync">Add User</button>
+
+@code {
+    [Inject]
+    public NavigationManager MyNavigationManager { get; set; }
+    HttpClient httpClient = new HttpClient();
+    PersonModel newUser;
+    protected override void OnInitialized()
+    {
+        httpClient.BaseAddress = new Uri(MyNavigationManager.BaseUri);
+        newUser = new PersonModel();
+    }
+    async Task PopulateDBAsync()
+    {
+        await httpClient.GetAsync("api/PopulateDB");
+    }
+    async Task AddUserAsync()
+    {
+        if (string.IsNullOrEmpty(newUser.Email) || string.IsNullOrEmpty(newUser.FirstName) || string.IsNullOrEmpty(newUser.LastName)
+            || string.IsNullOrEmpty(newUser.Hobbies) || string.IsNullOrEmpty(newUser.Ocupation))
+        {
+            //todo add error modal
+            return;
+        }
+        StringContent httpContent = new StringContent(JsonConvert.SerializeObject(newUser));
+        HttpRequestMessage requestMessage = new HttpRequestMessage(HttpMethod.Post, MyNavigationManager.BaseUri + "api/AddUser");
+        requestMessage.Content = new StringContent(JsonConvert.SerializeObject(newUser),
+                        Encoding.UTF8, "application/json");
+        var response = await httpClient.SendAsync(requestMessage);
+        if (response.IsSuccessStatusCode)
+        {
+            //todo add error success
+        }
+        else
+        {
+            //todo add error modal
+        }
+    }
+}
