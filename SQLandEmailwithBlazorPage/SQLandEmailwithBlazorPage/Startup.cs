@@ -29,7 +29,6 @@ namespace SQLandEmailwithBlazorPage
         {
             services.AddRazorPages();
             services.AddServerSideBlazor();
-            services.AddSingleton<WeatherForecastService>();
             services.AddSingleton(new AzureServiceTokenProvider());
             services.AddDbContext<TutorialDBContext>();
 

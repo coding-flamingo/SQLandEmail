@@ -1,4 +1,5 @@
-﻿using SQLandEmailwithBlazorPage.Data;
+﻿using Microsoft.Extensions.Configuration;
+using SQLandEmailwithBlazorPage.Data;
 using SQLandEmailwithBlazorPage.Models;
 using System;
 using System.Collections.Generic;
@@ -10,9 +11,13 @@ namespace SQLandEmailwithBlazorPage.Managers
     public class PeopleManager
     {
         TutorialDBContext _dbContext;
-        public PeopleManager(TutorialDBContext tutorialDBContext)
+        private readonly EmailManager _emailManager;
+
+        public PeopleManager(TutorialDBContext tutorialDBContext, IConfiguration configuration)
         {
             _dbContext = tutorialDBContext;
+            _emailManager = new EmailManager(configuration);
+
         }
 
         public void PopulateDB()
@@ -65,10 +70,12 @@ namespace SQLandEmailwithBlazorPage.Managers
             await _dbContext.SaveChangesAsync();
         }
 
-        public void AddUser(PersonModel user)
+        public async Task AddUserAsync(PersonModel user)
         {
             _dbContext.People.Add(user);
-            _dbContext.SaveChanges();
+            await _dbContext.SaveChangesAsync();
+            await _emailManager.SendWelcomeEmailAsync(user);
+
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using SQLandEmailwithBlazorPage.Data;
 using SQLandEmailwithBlazorPage.Managers;
 using SQLandEmailwithBlazorPage.Models;
@@ -14,10 +15,10 @@ namespace SQLandEmailwithBlazorPage.Controllers
     {
         private readonly TutorialDBContext _dbContext;
         private readonly PeopleManager _peopleManager;
-        public PeopleController(TutorialDBContext dbContext)
+        public PeopleController(TutorialDBContext dbContext, IConfiguration configuration)
         {
             _dbContext = dbContext;
-            _peopleManager = new PeopleManager(_dbContext);
+            _peopleManager = new PeopleManager(_dbContext, configuration);
         }
 
         [Route("api/PopulateDB")]
@@ -29,13 +30,13 @@ namespace SQLandEmailwithBlazorPage.Controllers
 
         [Route("api/AddUser")]
         [HttpPost]
-        public void AddUser(PersonModel user)
+        public async Task AddUserAsync(PersonModel user)
         {
             if(user == null)
             {
                 throw new ArgumentNullException("user cannot be empty");
             }
-            _peopleManager.AddUser(user);
+            await _peopleManager.AddUserAsync(user);
         }
 
         [Route("api/GetPeople")]
