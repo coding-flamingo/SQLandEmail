@@ -65,7 +65,6 @@
             //todo add error modal
             return;
         }
-        StringContent httpContent = new StringContent(JsonConvert.SerializeObject(newUser));
         HttpRequestMessage requestMessage = new HttpRequestMessage(HttpMethod.Post, MyNavigationManager.BaseUri + "api/AddUser");
         requestMessage.Content = new StringContent(JsonConvert.SerializeObject(newUser),
                         Encoding.UTF8, "application/json");
