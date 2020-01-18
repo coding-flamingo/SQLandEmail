@@ -7,41 +7,38 @@
 
 <p>This component demonstrates fetching data from a database.</p>
 
-@if (people == null)
-{
-    <p><em>Loading...</em></p>
-}
-else
-{
-    <table class="table">
-        <thead>
-            <tr>
-                <th>First Name</th>
-                <th>Last Name</th>
-                <th>Email</th>
-                <th>Ocupation</th>
-                <th>Hobbies</th>
-                <th>Age</th>
-                <th>Delete</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var person in people)
-            {
-            <tr>
-                <td>@person.FirstName</td>
-                <td>@person.LastName</td>
-                <td>@person.Email</td>
-                <td>@person.Ocupation</td>
-                <td>@person.Hobbies</td>
-                <td>@person.Age</td>
-                <td><button @onclick="(e => DeleteUserAsync(person.Email))" type="button" class="btn btn-danger deletebutton" data-toggle="delete" data-target="#delete">Delete</button></td>
+<SpinLoader IsLoading="@(people == null)">
+    <ContentTemplate>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Email</th>
+                    <th>Ocupation</th>
+                    <th>Hobbies</th>
+                    <th>Age</th>
+                    <th>Delete</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var person in people)
+                {
+                    <tr>
+                        <td>@person.FirstName</td>
+                        <td>@person.LastName</td>
+                        <td>@person.Email</td>
+                        <td>@person.Ocupation</td>
+                        <td>@person.Hobbies</td>
+                        <td>@person.Age</td>
+                        <td><button @onclick="(e => DeleteUserAsync(person.Email))" type="button" class="btn btn-danger deletebutton" data-toggle="delete" data-target="#delete">Delete</button></td>
 
-            </tr>
-            }
-        </tbody>
-    </table>
-}
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </ContentTemplate>
+</SpinLoader>
 
 @code {
     [Inject]
