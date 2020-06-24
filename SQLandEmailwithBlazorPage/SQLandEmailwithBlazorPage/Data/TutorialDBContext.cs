@@ -26,7 +26,7 @@ namespace SQLandEmailwithBlazorPage.Data
                 ConnectionString = _configuration.GetConnectionString("SQLDBConnection"),
                 AccessToken = _azureServiceTokenProvider.GetAccessTokenAsync("https://database.windows.net/").Result
         };
-            optionsBuilder.UseSqlServer(connection);
+            optionsBuilder.UseSqlServer(connection, options => options.EnableRetryOnFailure());
         }
 
     }
