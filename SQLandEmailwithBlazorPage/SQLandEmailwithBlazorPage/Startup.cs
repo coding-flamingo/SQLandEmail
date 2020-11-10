@@ -11,6 +11,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using SQLandEmailwithBlazorPage.Data;
+using SQLandEmailwithBlazorPage.Services;
 
 namespace SQLandEmailwithBlazorPage
 {
@@ -30,6 +31,7 @@ namespace SQLandEmailwithBlazorPage
             services.AddRazorPages();
             services.AddServerSideBlazor();
             services.AddSingleton(new AzureServiceTokenProvider());
+            services.AddSingleton<IAKVService, AKVService>();
             services.AddDbContext<TutorialDBContext>();
 
 
