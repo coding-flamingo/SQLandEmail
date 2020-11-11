@@ -7,10 +7,12 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Azure.Services.AppAuthentication;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using SQLandEmailwithBlazorPage.Data;
+using SQLandEmailwithBlazorPage.Managers;
 using SQLandEmailwithBlazorPage.Services;
 
 namespace SQLandEmailwithBlazorPage
@@ -30,10 +32,14 @@ namespace SQLandEmailwithBlazorPage
         {
             services.AddRazorPages();
             services.AddServerSideBlazor();
+            services.AddMemoryCache();
             services.AddSingleton(new AzureServiceTokenProvider());
             services.AddSingleton<IAKVService, AKVService>();
-            services.AddDbContext<TutorialDBContext>();
-
+            services.AddTransient<EmailManager>();
+            services.AddTransient<PeopleManager>();
+            //services.AddDbContext<TutorialDBContext>();
+            services.AddDbContextPool<TutorialDBContext>(options => options.UseSqlServer(Configuration.GetConnectionString("SQLDBConnection"),
+                providerOptions => providerOptions.EnableRetryOnFailure()));
 
         }
 

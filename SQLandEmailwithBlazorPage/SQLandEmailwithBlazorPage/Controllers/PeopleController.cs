@@ -15,10 +15,10 @@ namespace SQLandEmailwithBlazorPage.Controllers
     {
         private readonly TutorialDBContext _dbContext;
         private readonly PeopleManager _peopleManager;
-        public PeopleController(TutorialDBContext dbContext, IConfiguration configuration)
+        public PeopleController(TutorialDBContext dbContext, PeopleManager peopleManager)
         {
             _dbContext = dbContext;
-            _peopleManager = new PeopleManager(_dbContext, configuration);
+            _peopleManager = peopleManager;
         }
 
         [Route("api/PopulateDB")]

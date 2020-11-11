@@ -13,21 +13,27 @@ namespace SQLandEmailwithBlazorPage.Data
         private readonly IConfiguration _configuration;
 
         private AzureServiceTokenProvider _azureServiceTokenProvider;
-        public TutorialDBContext(IConfiguration configuration, DbContextOptions<TutorialDBContext> options, AzureServiceTokenProvider azureServiceTokenProvider) : base(options)
+
+        public TutorialDBContext(DbContextOptions<TutorialDBContext> options) : base(options)
         {
-            _configuration = configuration;
-            _azureServiceTokenProvider = azureServiceTokenProvider;
+
         }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            SqlConnection connection = new SqlConnection
-            {
-                ConnectionString = _configuration.GetConnectionString("SQLDBConnection"),
-                AccessToken = _azureServiceTokenProvider.GetAccessTokenAsync("https://database.windows.net/").Result
-        };
-            optionsBuilder.UseSqlServer(connection, options => options.EnableRetryOnFailure());
-        }
+        //public TutorialDBContext(IConfiguration configuration, DbContextOptions<TutorialDBContext> options, AzureServiceTokenProvider azureServiceTokenProvider) : base(options)
+        //{
+        //    _configuration = configuration;
+        //    _azureServiceTokenProvider = azureServiceTokenProvider;
+        //}
+
+        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //{
+        //    SqlConnection connection = new SqlConnection
+        //    {
+        //        ConnectionString = _configuration.GetConnectionString("SQLDBConnectionAzure"),
+        //        AccessToken = _azureServiceTokenProvider.GetAccessTokenAsync("https://database.windows.net/").Result
+        //};
+        //    optionsBuilder.UseSqlServer(connection, options => options.EnableRetryOnFailure());
+        //}
 
     }
 }

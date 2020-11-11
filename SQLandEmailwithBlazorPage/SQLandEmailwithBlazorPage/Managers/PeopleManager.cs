@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using SQLandEmailwithBlazorPage.Data;
 using SQLandEmailwithBlazorPage.Models;
 using System;
@@ -13,10 +14,10 @@ namespace SQLandEmailwithBlazorPage.Managers
         TutorialDBContext _dbContext;
         private readonly EmailManager _emailManager;
 
-        public PeopleManager(TutorialDBContext tutorialDBContext, IConfiguration configuration)
+        public PeopleManager(TutorialDBContext tutorialDBContext, EmailManager emailman, IConfiguration configuration)
         {
             _dbContext = tutorialDBContext;
-            _emailManager = new EmailManager(configuration);
+            _emailManager = emailman;
 
         }
 
@@ -72,10 +73,18 @@ namespace SQLandEmailwithBlazorPage.Managers
 
         public async Task AddUserAsync(PersonModel user)
         {
-            _dbContext.People.Add(user);
-            await _dbContext.SaveChangesAsync();
-            await _emailManager.SendWelcomeEmailAsync(user);
-
+            if (user == null)
+            {
+                throw new ArgumentException("User cannot be null");
+            }
+            PersonModel existingPerson = await _dbContext.People.FirstOrDefaultAsync(x 
+                => x.Email == user.Email);
+            if(existingPerson == null)
+            {
+                _dbContext.People.Add(user);
+                await _dbContext.SaveChangesAsync();
+                await _emailManager.SendWelcomeEmailAsync(user);
+            }
         }
     }
 }
