@@ -13,37 +13,43 @@ namespace SQLandEmailwithBlazorPage.Managers
     {
         TutorialDBContext _dbContext;
         private readonly EmailManager _emailManager;
-
+        private readonly IConfiguration _configuration;
         public PeopleManager(TutorialDBContext tutorialDBContext, EmailManager emailman, IConfiguration configuration)
         {
             _dbContext = tutorialDBContext;
             _emailManager = emailman;
-
+            _configuration = configuration;
         }
 
         public void PopulateDB()
         {
-            PersonModel patrick = new PersonModel();
-            patrick.FirstName = "Patrick";
-            patrick.LastName = "Star";
-            patrick.Email = "patrick.star@gmail.com";
-            patrick.Age = 12;
-            patrick.Ocupation = "Actor";
-            patrick.Hobbies = "Eating";
-            PersonModel bob = new PersonModel();
-            bob.FirstName = "Sponge";
-            bob.LastName = "Bob";
-            bob.Email = "Sponge.Bob@gmail.com";
-            bob.Age = 15;
-            bob.Ocupation = "Cook";
-            bob.Hobbies = "Cooking";
-            PersonModel coding = new PersonModel();
-            coding.FirstName = "coding";
-            coding.LastName = "flamingo";
-            coding.Email = "codingflamingo@gmail.com";
-            coding.Age = 22;
-            coding.Ocupation = "Programmer";
-            coding.Hobbies = "Youtube";
+            PersonModel patrick = new PersonModel
+            {
+                FirstName = "Patrick",
+                LastName = "Star",
+                Email = "patrick.star@gmail.com",
+                Age = 12,
+                Ocupation = "Actor",
+                Hobbies = "Eating"
+            };
+            PersonModel bob = new PersonModel
+            {
+                FirstName = "Sponge",
+                LastName = "Bob",
+                Email = "Sponge.Bob@gmail.com",
+                Age = 15,
+                Ocupation = "Cook",
+                Hobbies = "Cooking"
+            };
+            PersonModel coding = new PersonModel
+            {
+                FirstName = "coding",
+                LastName = "flamingo",
+                Email = "codingflamingo@gmail.com",
+                Age = 22,
+                Ocupation = "Programmer",
+                Hobbies = "Youtube"
+            };
             _dbContext.People.Add(patrick);
             _dbContext.People.Add(coding);
             _dbContext.People.Add(bob);
